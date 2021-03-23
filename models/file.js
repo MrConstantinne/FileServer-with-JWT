@@ -30,5 +30,4 @@ const file = sequelize.define('files', {
     }
 })
 
-
 export default file;

@@ -11,40 +11,22 @@ import {authenticateToken} from '../middleware/auth';
 
 const files = express.Router();
 
-files.get(
-    '/list',
-    authenticateToken,
-    getFiles
-);
+files.get('/list', authenticateToken, getFiles);
 
-files.get(
-    '/:id',
-    authenticateToken,
-    getFile
-);
+files.get('/:id', authenticateToken, getFile);
 
-files.post(
-    '/upload',
+files.post('/upload',
     authenticateToken,
     express.static(path.resolve('file/filebd')),
     multer.single(''),
     createFile
 );
 
-files.delete(
-    '/delete/:id',
-    authenticateToken,
-    deleteFile
-);
+files.delete('/delete/:id', authenticateToken, deleteFile);
 
-files.get(
-    '/download/:id',
-    authenticateToken,
-    downloadFile
-);
+files.get('/download/:id', authenticateToken, downloadFile);
 
-files.put(
-    '/update/:id',
+files.put('/update/:id',
     authenticateToken,
     express.static(path.resolve('file/filebd')),
     multer.single(''),

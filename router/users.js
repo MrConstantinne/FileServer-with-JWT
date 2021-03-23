@@ -8,31 +8,14 @@ import { me } from '../users/me';
 
 const users = Router();
 
-users.get(
-    '/info',
-    authenticateToken,
-    me
-);
+users.get('/info', authenticateToken, me);
 
-users.post(
-    '/signup',
-    signUp
-);
+users.post('/signup', signUp);
 
-users.post(
-    '/signin',
-    signIn
-);
+users.post('/signin', signIn);
 
-users.post(
-    '/signin/new_token',
-    signInRefreshToken
-);
+users.post('/signin/new_token', signInRefreshToken);
 
-users.get(
-    '/logout',
-    authenticateToken,
-    logout
-);
+users.get('/logout', authenticateToken, logout);
 
 export default users;
