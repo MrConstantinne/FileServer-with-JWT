@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { sign, verify } from 'jsonwebtoken';
+import {sign, verify, VerifyErrors} from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
 import Users from '../models/users';
@@ -12,7 +12,7 @@ export const signIn = async (req: Request, res:Response) => {
     try{
         const foundUser = await Users.findOne({ where: id });
         if (!foundUser) {
-            return res.status(404).json({ message: `There is no such user` });
+            return res.status(404).json({ message: `Users not found` });
         }
 
         const checkedPassword = await compare(password, foundUser.password);
@@ -20,10 +20,10 @@ export const signIn = async (req: Request, res:Response) => {
             res.status(403).json({ message: 'Incorrect username or password' });
         }
 
-        const jwtAccessToken = sign({id}, JWT_ACCESS_KEY, {expiresIn: '10m'});
-        const jwtRefreshToken = sign({id}, JWT_REFRESH_KEY);
+        const jwtAccessToken = sign({ id : foundUser.id }, JWT_ACCESS_KEY, { expiresIn: '10m' });
+        const jwtRefreshToken = sign({ id : foundUser.id }, JWT_REFRESH_KEY);
 
-        await Users.update({ refreshToken: jwtRefreshToken }, { where: { id: foundUser.id } });
+        await Users.update({ refreshToken: jwtRefreshToken }, { where: id });
 
         return res.status(202).json({
             message: 'Authentication was successful',
@@ -37,16 +37,16 @@ export const signIn = async (req: Request, res:Response) => {
 
 export const signInRefreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.body.token;
-    const foundRefreshToken = await Users.findOne({ where: refreshToken });
     if (refreshToken == null) {
         return res.status(401).json({ message: `You are not logged in` });
     }
+    const foundRefreshToken = await Users.findOne({ where: refreshToken });
     if (!foundRefreshToken) { return res.status(403).json({ message: `Access denied` }); }
-    verify(refreshToken, JWT_REFRESH_KEY, (err, id) => {
+    verify(refreshToken, JWT_REFRESH_KEY, (err: VerifyErrors | null, id: object | undefined) => {
         if (err) {
             return res.status(403).json({ message: `Access denied` });
         }
         const accessToken = sign({id}, JWT_ACCESS_KEY, {expiresIn: '10m'});
-        res.json({access_token: accessToken});
+        return res.json({ access_token: accessToken });
     });
 };

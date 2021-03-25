@@ -7,7 +7,7 @@ import { createFile } from '../file/upload';
 import { deleteFile } from '../file/delete';
 import { updateFile } from '../file/update';
 import { downloadFile } from '../file/download';
-import {authenticateToken} from '../middleware/auth';
+import { authenticateToken } from '../middleware/auth';
 
 const files = Router();
 

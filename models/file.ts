@@ -1,8 +1,8 @@
-import Sequelize from 'sequelize';
+import Sequelize, { Model, ModelCtor } from 'sequelize';
 
 import { sequelize } from '../database';
 
-const file = sequelize.define('files', {
+const file: ModelCtor<Model> = sequelize.define('files', {
     id: {
         primaryKey: true,
         allowNull: false,

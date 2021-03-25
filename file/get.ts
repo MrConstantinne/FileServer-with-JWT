@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import Files from '../models/file';
 // @ts-ignore
 import { calculateLimitAndOffset, paginate } from 'paginate-info';
-import Files from '../models/file';
 
 export const getFiles = async (req: Request, res: Response) => {
     try {
@@ -18,7 +18,7 @@ export const getFiles = async (req: Request, res: Response) => {
 export const getFile = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-        const file = await Files.findOne({ where: id });
+        const file = await Files.findOne({ where: `${ id }` });
         return res.json({ data: file });
     } catch (err) {
         res.status(500).json({ message: `Error: ${ err }` });

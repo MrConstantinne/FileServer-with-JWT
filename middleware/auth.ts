@@ -10,7 +10,8 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     if (JWT_ACCESS_KEY !== undefined) {
         verify(token, JWT_ACCESS_KEY, (err, id) => {
             if (err) res.status(403).json({ message: `Access denied` });
-            req.id = id;
+            req.body.id = id;
+            req.body.token = token;
             next();
         });
     }

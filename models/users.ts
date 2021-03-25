@@ -1,8 +1,8 @@
-import Sequelize from 'sequelize';
+import Sequelize, {Model, ModelCtor} from 'sequelize';
 
 import { sequelize } from '../database';
 
-const users = sequelize.define('users', {
+const users: ModelCtor<Model> = sequelize.define('users', {
     id: {
         primaryKey: true,
         allowNull: false,
