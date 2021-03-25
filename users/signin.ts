@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 
@@ -6,7 +7,7 @@ import Users from '../models/users';
 const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
 const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
 
-export const signIn = async (req, res) => {
+export const signIn = async (req: Request, res:Response) => {
     const { id, password } = req.body;
     try{
         const foundUser = await Users.findOne({ where: id });
@@ -19,8 +20,8 @@ export const signIn = async (req, res) => {
             res.status(403).json({ message: 'Incorrect username or password' });
         }
 
-        const jwtAccessToken = await sign({ id }, JWT_ACCESS_KEY, { expiresIn: '10m' });
-        const jwtRefreshToken = await sign({ id }, JWT_REFRESH_KEY);
+        const jwtAccessToken = sign({id}, JWT_ACCESS_KEY, {expiresIn: '10m'});
+        const jwtRefreshToken = sign({id}, JWT_REFRESH_KEY);
 
         await Users.update({ refreshToken: jwtRefreshToken }, { where: { id: foundUser.id } });
 
@@ -34,16 +35,18 @@ export const signIn = async (req, res) => {
     }
 };
 
-export const signInRefreshToken = async (req, res) => {
+export const signInRefreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.body.token;
     const foundRefreshToken = await Users.findOne({ where: refreshToken });
     if (refreshToken == null) {
         return res.status(401).json({ message: `You are not logged in` });
     }
-    if (!foundRefreshToken) return res.status(403).json({ message: `Access denied` });
-    await verify(refreshToken, JWT_REFRESH_KEY, (err, id) => {
-        if (err) return res.status(403).json({ message: `Access denied` });
-        const accessToken = sign({ id }, JWT_ACCESS_KEY, { expiresIn: '10m' });
-        res.json({ access_token: accessToken });
+    if (!foundRefreshToken) { return res.status(403).json({ message: `Access denied` }); }
+    verify(refreshToken, JWT_REFRESH_KEY, (err, id) => {
+        if (err) {
+            return res.status(403).json({ message: `Access denied` });
+        }
+        const accessToken = sign({id}, JWT_ACCESS_KEY, {expiresIn: '10m'});
+        res.json({access_token: accessToken});
     });
 };

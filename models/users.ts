@@ -15,6 +15,6 @@ const users = sequelize.define('users', {
     refreshToken: {
         type: Sequelize.STRING
     }
-})
+});
 
 export default users;

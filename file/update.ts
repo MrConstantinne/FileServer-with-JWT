@@ -1,8 +1,9 @@
-import fs from 'fs'
+import fs from 'fs';
 import path from 'path';
 import Files from '../models/file';
+import { Request, Response } from 'express';
 
-export const updateFile = async (req, res) => {
+export const updateFile = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { originalname, mimeType, size} = req.file;
     try {

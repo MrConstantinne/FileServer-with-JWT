@@ -1,7 +1,8 @@
 import path from 'path';
 import Files from '../models/file';
+import { Request, Response } from 'express';
 
-export const createFile = async (req, res) => {
+export const createFile = async (req: Request, res: Response) => {
     try {
         const file = await Files.create({
             id: req.file.filename.split('.')[0],

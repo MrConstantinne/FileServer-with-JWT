@@ -1,7 +1,8 @@
+import { Request, Response } from 'express';
 import Files from '../models/file';
-import fs from 'fs'
+import fs from 'fs';
 
-export const downloadFile = async (req, res) => {
+export const downloadFile = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const file = await Files.findOne({ where: id });
@@ -16,6 +17,6 @@ export const downloadFile = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(500).json({ message: `Ошибка сервера: ${ err }` });
+        res.status(500).json({ message: `Error: ${ err }` });
     }
-}
+};

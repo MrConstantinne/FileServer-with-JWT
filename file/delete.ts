@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
 import path from 'path';
 import { remove } from 'fs-extra';
 
 import Files from '../models/file';
 
-export const deleteFile = async (req, res) => {
+export const deleteFile = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
         const file = await Files.findOne({ where: id });

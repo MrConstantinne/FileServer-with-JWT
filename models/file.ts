@@ -28,6 +28,6 @@ const file = sequelize.define('files', {
         type: Sequelize.STRING,
         allowNull: false,
     }
-})
+});
 
 export default file;

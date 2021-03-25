@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 
 import multer from '../middleware/multer';
@@ -9,7 +9,7 @@ import { updateFile } from '../file/update';
 import { downloadFile } from '../file/download';
 import {authenticateToken} from '../middleware/auth';
 
-const files = express.Router();
+const files = Router();
 
 files.get('/list', authenticateToken, getFiles);
 

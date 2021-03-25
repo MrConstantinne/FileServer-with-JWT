@@ -1,8 +1,9 @@
+import { Request, Response } from 'express';
 import { sign } from 'jsonwebtoken';
 import { hash } from 'bcrypt';
 import Users from '../models/users';
 
-export const signUp = async (req, res) => {
+export const signUp = async (req: Request, res: Response) => {
     const { id, password } = req.body;
     const JWT_ACCESS_KEY = process.env.JWT_ACCESS_KEY;
     const JWT_REFRESH_KEY = process.env.JWT_REFRESH_KEY;
@@ -18,8 +19,8 @@ export const signUp = async (req, res) => {
             return res.status(403).json({ message: `The user is already registered` });
         }
         const hashPassword = await hash(password, 12);
-        const jwtAccessToken = await sign({ id }, JWT_ACCESS_KEY, { expiresIn: '10m' });
-        const jwtRefreshToken = await sign({ id }, JWT_REFRESH_KEY);
+        const jwtAccessToken = sign({id}, JWT_ACCESS_KEY, {expiresIn: '10m'});
+        const jwtRefreshToken = sign({id}, JWT_REFRESH_KEY);
         await Users.create({
             id,
             password: hashPassword,
